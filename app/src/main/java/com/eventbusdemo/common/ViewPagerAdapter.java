@@ -1,5 +1,7 @@
 package com.eventbusdemo.common;
 
+import android.app.Activity;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -14,11 +16,13 @@ import java.util.List;
  * Created by alvina.rasquinha on 27/03/18.
  */
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
-    int mNumOfTabs;
+    private int mNumOfTabs;
+    private Activity context;
 
-    public ViewPagerAdapter(FragmentManager fm, int NumOfTabs) {
+    public ViewPagerAdapter(FragmentManager fm, int NumOfTabs, Activity context) {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
+        this.context = context;
     }
 
     @Override
@@ -27,9 +31,15 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case 0:
                 TabFragment tab1 = new TabFragment();
+                Bundle b1 = new Bundle();
+                b1.putInt("which", 1);
+                tab1.setArguments(b1);
                 return tab1;
             case 1:
                 TabFragment tab2 = new TabFragment();
+                Bundle b2 = new Bundle();
+                b2.putInt("which", 2);
+                tab2.setArguments(b2);
                 return tab2;
             default:
                 return null;
