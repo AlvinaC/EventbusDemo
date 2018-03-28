@@ -2,7 +2,7 @@
 Using Eventbus 
 
 
-Many of the times we would want to asynchronously modify tabbed fragments after they are rendered. A simpler method of achieving it thorugh RxBus is demonstrated here.
+Many of the times we would want to asynchronously modify tabbed fragments after they are rendered. A simpler method of achieving it through RxBus is demonstrated here.
 
 Scenario
 
