@@ -19,7 +19,10 @@ import com.eventbusdemo.util.EventbusApp;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by alvina.rasquinha on 27/03/18.
@@ -32,6 +35,8 @@ public class TabFragment extends Fragment {
     private Unbinder unbinder;
     private RecyclerAdapter mAdapter;
     private int which;
+
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
 
     public TabFragment() {
@@ -57,9 +62,11 @@ public class TabFragment extends Fragment {
     private void registerEventBus() {
         switch (which) {
             case 2:
-                ((EventbusApp) getActivity().getApplication())
+                disposables.add(((EventbusApp) getActivity().getApplication())
                         .bus()
                         .toObservable()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Consumer<Object>() {
                             @Override
                             public void accept(Object object) throws Exception {
@@ -67,7 +74,7 @@ public class TabFragment extends Fragment {
                                     recyclerView.getAdapter().notifyDataSetChanged();
                                 }
                             }
-                        });
+                        }));
                 break;
         }
     }
@@ -89,5 +96,7 @@ public class TabFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        // do not send event after activity has been destroyed
+        disposables.clear();
     }
 }
